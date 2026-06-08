@@ -1,0 +1,6 @@
+{
+  "name": "Choose Life: Subculture Simulator",
+  "description": "An interactive storytelling simulator focusing on subcultures. Navigate society, customize your identity, and find your ending.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

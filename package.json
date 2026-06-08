@@ -1,0 +1,464 @@
+{
+  "name": "react-example",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port=3000 --host=0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview",
+    "clean": "rm -rf dist server.js",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@google/genai": "^2.4.0",
+    "@tailwindcss/vite": "^4.1.14",
+    "@vitejs/plugin-react": "^5.0.4",
+    "lucide-react": "^0.546.0",
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1",
+    "vite": "^6.2.3",
+    "express": "^4.21.2",
+    "dotenv": "^17.2.3",
+    "motion": "^12.23.24"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "autoprefixer": "^10.4.21",
+    "esbuild": "^0.25.0",
+    "tailwindcss": "^4.1.14",
+    "tsx": "^4.21.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.3",
+    "@types/express": "^4.17.21"
+  },
+  "storyDb": {
+    "start": {
+      "text": "CHOOSE LIFE. Choose a job. Choose a career. Choose a family. Choose a f**king big television, choose washing machines, cars, compact disc players and electrical tin openers...\nOr choose something else.\n\n选择生活，选择工作，选择事业，选择家庭，选择他玛的大电视，选择洗衣机，汽车，CD播放机和电动开罐器…… 还是选择别的东西？\n\nYou stare at the graffiti-covered mirror in the underground restroom, 'The Worst Toilet in Scotland' vibes. A crushed can of Monster Energy, sticky with sweet green liquid, sits by the cracked sink. The neon light flickers to a relentless BPM. It's Friday night. Who are you choosing to be today?\n你盯着地下洗手间那面涂满文字的镜子，这破地方简直散发着《猜火车》里全苏格兰最恶心厕所的那种绝望气味。水槽边缘放着一个被捏瘪的魔爪（Monster Energy）空罐。闪烁的霓虹灯随着无休止的重低音跳动。今天是周五的夜晚。你选择成为谁？",
+      "choices": [
+        {
+          "label": "The Visual Kei/Androgynous (视觉系/男娘) - Hairspray, lace, and shattered mirrors. 喷上大量发胶，穿上黑色蕾丝，化作雌雄莫辨的视觉系魅影。",
+          "next": "visual_kei_club",
+          "impact": {
+            "rebellion": 2,
+            "expression": 4
+          }
+        },
+        {
+          "label": "The Grunge Slacker (垃圾摇滚) - Flannels, Nirvana, and pure apathy. 破洞法兰绒，听着Nirvana，对世界充满厌倦与麻木。",
+          "next": "grunge_dive_bar",
+          "impact": {
+            "alienation": 3,
+            "expression": 2
+          }
+        },
+        {
+          "label": "The Cult Film Emo (Cult片死忠/情绪硬核) - Bleeding hearts, bizarre underground films. 沉溺于B级Cult片和黑色的情绪黑洞，拒绝一切阳光。",
+          "next": "cult_film_squat",
+          "impact": {
+            "alienation": 4,
+            "rebellion": 2
+          }
+        },
+        {
+          "label": "Corporate Drone (社畜) - Wash your face. 洗把脸，抹去眼角的疲惫，准备回去修改周末要交的PPT。",
+          "next": "office_monday",
+          "impact": {
+            "conformity": 4,
+            "alienation": 1
+          }
+        }
+      ]
+    },
+    "visual_kei_club": {
+      "text": "The club is a sea of black leather, elaborate corsets, and heavy gothic eyeliner. A local Visual Kei band is shredding on stage, their hair defying gravity.\n\n俱乐部里是一片黑色皮革、精致的束身衣和浓重的哥特眼线的海洋。一支本土的视觉系乐队正在台上狂飙吉他，他们的发型简直无视了重力的存在。\n\nLuna, the lead singer, notices you. She has severe body modifications—split tongue, micro-dermal implants. She hands you a suspiciously colorful cocktail. 'Drink up, doll. Pain is just an aesthetic.'\n主唱Luna注意到了你。她身上有着极端的身体改造——分舌、皮下植入物。她递给你一杯颜色极其夸张可疑的鸡尾酒（OD危险）。“喝吧，娃娃。痛楚只是一种美学。”",
+      "choices": [
+        {
+          "label": "Drink it unhesitatingly. 毫不犹豫地一饮而尽，让毒性与幻觉在血液中蔓延。",
+          "next": "spiral_down_hospital",
+          "impact": {
+            "alienation": 3,
+            "rebellion": 3
+          }
+        },
+        {
+          "label": "Refuse the drink, but beg to join their band. 拒绝致命酒水，但狂热地请求加入他们的乐队巡演。",
+          "next": "groupie_life",
+          "impact": {
+            "expression": 3,
+            "conformity": 1
+          }
+        },
+        {
+          "label": "Start a fight with her bodyguards. 借着酒劲砸烂杯子，和她的保镖大打出手。",
+          "next": "street_brawl",
+          "impact": {
+            "rebellion": 4,
+            "expression": 1
+          }
+        }
+      ]
+    },
+    "grunge_dive_bar": {
+      "text": "The dive bar 'Void' is thick with stale beer. 'Smells Like Teen Spirit' blares from a blown-out jukebox. You sit at the sticky bar in your oversized, moth-eaten flannel.\n\n在一家名为“虚空”的破败酒吧里，弥漫着变质啤酒的味道。破烂的自动点唱机里狂放着Nirvana的《Smells Like Teen Spirit》。你穿着满是虫洞的宽大法兰绒衬衫坐在黏糊糊的吧台前。\n\nA guy resembling Kurt Cobain hands you a burnt spoon and a syringe. 'Escape is the only way out, man. Choose oblivion.' It strictly mirrors the gritty realism of Trainspotting.\n一个气质神似科特·柯本的颓废家伙递给你一把烧焦的勺子（极度危险）。“逃避是唯一的出路，兄弟。选择湮灭吧。”这场面简直就是《猜火车》肮脏现实的重演。",
+      "choices": [
+        {
+          "label": "Take the plunge into oblivion. 接过来，让自己彻底陷入虚无的深渊（OD）。",
+          "next": "heroin_chic_trip",
+          "impact": {
+            "alienation": 5,
+            "rebellion": 1
+          }
+        },
+        {
+          "label": "Smash the spoon, grab his guitar and get on stage. 砸碎那把勺子，抢过他的吉他冲上舞台爆音。",
+          "next": "nirvana_mosh",
+          "impact": {
+            "rebellion": 4,
+            "expression": 4
+          }
+        },
+        {
+          "label": "Walk out. This isn't your scene anymore. 转身离开。这种像烂泥一样的生活不再适合你。",
+          "next": "redemption_path",
+          "impact": {
+            "conformity": 2
+          }
+        }
+      ]
+    },
+    "cult_film_squat": {
+      "text": "You are squatting in an abandoned building with peeling wallpaper. A stolen CRT TV plays abstract David Lynch films and 'Pink Flamingos' on a continuous loop.\n\n你盘踞在一栋墙纸剥落的废弃建筑里。一台偷来的老式显像管电视正在无限循环播放大卫·林奇的抽象片段和重口味的《粉红火烈鸟》。\n\nYour friend 'Raven' is meticulously carving a symbol into their own forearm with a razor blade. Blood drips onto the carpet. 'Flesh is temporary, cinema is eternal,' they whisper, mesmerized by the gore on screen.\n你的朋友“渡鸦”正心无旁骛地用剃须刀片在自己的小臂上割刻出一个符文（自残行为危险）。鲜血滴在地毯上。“肉体是暂时的，影像是永恒的，”她痴迷于屏幕上的血腥画面，轻声呢喃着。",
+      "choices": [
+        {
+          "label": "Take the blade and carve your own manifesto. 拿过刀片，在自己的手臂上刻下残酷的宣言。",
+          "next": "spiral_down_hospital",
+          "impact": {
+            "alienation": 4,
+            "expression": 2
+          }
+        },
+        {
+          "label": "Light a blunt and stare at the TV until you hallucinate. 点燃一支叶子，死盯着电视屏幕直到产生强烈的狂躁幻觉。",
+          "next": "bad_trip",
+          "impact": {
+            "alienation": 3,
+            "rebellion": 2
+          }
+        },
+        {
+          "label": "Freak out and call an ambulance for them. 心理防线彻底崩溃，抢下刀片并为她叫救护车。",
+          "next": "redemption_path",
+          "impact": {
+            "conformity": 3
+          }
+        }
+      ]
+    },
+    "street_brawl": {
+      "text": "The adrenaline spikes. Glass shatters. You punch the nearest corporate stiff who wandered into the wrong bar. It's a chaotic symphony of violence and raw anger.\n\n肾上腺素飙升。玻璃碎裂的声音响起。你一拳打在了一个走错酒吧的西装男脸上。这是一场由暴力与原始愤怒交织的混乱交响曲。\n\nSirens wail in the distance. The police are coming. Your knuckles are bleeding.\n远处传来刺耳的警笛声。警察来了。你的指关节在疯狂流血。",
+      "choices": [
+        {
+          "label": "Stand your ground and fight the cops. 坚守阵地，抄起残破的酒瓶与警察正面血拼。",
+          "next": "jail_ending",
+          "impact": {
+            "rebellion": 5,
+            "alienation": 2
+          }
+        },
+        {
+          "label": "Run through the back alley into the night. 穿过发臭的后巷，像条逃家野狗一样遁入无尽的黑夜。",
+          "next": "pure_rebellion",
+          "impact": {
+            "rebellion": 3,
+            "expression": 1
+          }
+        }
+      ]
+    },
+    "groupie_life": {
+      "text": "You follow the band on their underground tour. You live in cramped vans, surviving on gas station food and stolen alcohol. You've become part of the dark circus.\n\n你跟着这支视觉系乐队开始了地下巡演。你们挤在狭窄闷热的面包车里，靠着加油站的垃圾食品和偷来的廉价烈酒度日。你成了这个黑暗马戏团的一员。\n\nBut the drama escalates. The lead singer ODs in a motel room, and the police start pounding on the door.\n但戏剧性的事件急转直下。主唱在一家汽车旅馆里过量吸食药物（OD）濒危，警察开始在门外疯狂砸门。",
+      "choices": [
+        {
+          "label": "Take the fall for the band. 为了崇高的亚文化图腾，你选择扛下所有罪名顶罪。",
+          "next": "jail_ending",
+          "impact": {
+            "conformity": 3,
+            "alienation": 2
+          }
+        },
+        {
+          "label": "Flee the scene and reinvent yourself again. 翻窗抛弃他们逃离现场，隐姓埋名再次重塑身份。",
+          "next": "fade_away",
+          "impact": {
+            "alienation": 4
+          }
+        }
+      ]
+    },
+    "heroin_chic_trip": {
+      "text": "The needle drops. The world slows down into a warm, blurry amber. The 'Trainspotting' nightmare begins. You sink deep into the carpet, hallucinating a terrifying dead baby crawling on the ceiling.\n\n针头落下。世界放慢脚步，化作一片温暖而模糊的琥珀色。《猜火车》里最经典的死婴噩梦开始了。你深深陷进地毯里，幻视到一个死去的婴儿在天花板上向你爬行。\n\nDays pass in a dark, sweaty daze. You awaken in a hospital bed, hands tied in heavy leather restraints, violently withdrawing.\n几十个小时在这黑暗、充满汗水的恍惚中流逝。你在病床上猛然惊醒，双手被粗重的皮革束缚带绑死，正经历着生不如死的剧烈戒断反应（剧烈呕吐与痉挛）。",
+      "choices": [
+        {
+          "label": "Beg for rehab. This is rock bottom. 痛哭流涕乞求去强制戒毒所。这已经是绝望的谷底了。",
+          "next": "rehab_ending",
+          "impact": {
+            "conformity": 4,
+            "alienation": -2
+          }
+        },
+        {
+          "label": "Rip off the restraints and dive back into the abyss. 即使皮开肉绽也要硬生生扯断束缚带，逃回那虚无的深渊。",
+          "next": "club_27_ending",
+          "impact": {
+            "rebellion": 4,
+            "alienation": 5
+          }
+        }
+      ]
+    },
+    "nirvana_mosh": {
+      "text": "You grab the Fender Jaguar guitar. The feedback squeals as you crush a massive power chord. The crowd erupts into a violent mosh pit. You feel Kurt Cobain's spirit channeling through your bleeding fretboard fingers.\n\n你一把夺过那把破烂的Fender Jaguar吉他。当你重重砸下一个强力和弦时，失真反馈发出穿透耳膜的嘶鸣。人群爆发出暴力的死墙冲撞（Mosh Pit）。你感觉科特·柯本的灵魂正穿过你流血的手指。\n\nYou smash the guitar into the amplifier. The raw destruction is beautiful.\n你将吉他狠狠砸向扩音器音箱。这种纯粹的原始破坏力美得惊心动魄。",
+      "choices": [
+        {
+          "label": "Scream a final lyric and walk off stage into legend. 嘶喊出最后一句破音的歌词，走下舞台成为地下神话。",
+          "next": "pure_rebellion",
+          "impact": {
+            "expression": 5,
+            "rebellion": 3
+          }
+        },
+        {
+          "label": "Sign the major label deal the sleazy promoter offers. 演出结束后，立刻向金钱妥协，签下那个油滑星探的唱片合约。",
+          "next": "sell_out",
+          "impact": {
+            "conformity": 5,
+            "expression": -2
+          }
+        }
+      ]
+    },
+    "bad_trip": {
+      "text": "The visuals on the screen bleed into reality. You are trapped inside a David Lynch movie. The walls breathe, and shadows whisper your deepest insecurities.\n\n屏幕上的cult片血腥画面渗透进了感官现实。你彻底被剥夺了理智，被困在了一部大卫·林奇的电影里。墙壁在像肺叶一样呼吸，满屋的阴影在低语着你内心最深处的恐惧与不堪。\n\nYou run screaming into the night, convinced the corporate drones are alien replicants trying to steal your soul.\n你尖叫着冲入深夜的街道，坚信那些穿西装的社畜都是从天外飞来的异形复制人，正试图剖开你的脑壳窃取你的灵魂。",
+      "choices": [
+        {
+          "label": "Keep running until you end up in a psych ward. 疯狂奔逃，直到筋疲力尽，最终被警车送进精神病院的特护病房。",
+          "next": "rehab_ending",
+          "impact": {
+            "alienation": 4,
+            "conformity": 2
+          }
+        },
+        {
+          "label": "Embrace the madness, become the city's crazed prophet. 彻底拥抱这份疯狂，成为这座赛博城市里四处涂鸦的疯癫先知。",
+          "next": "pure_rebellion",
+          "impact": {
+            "rebellion": 4,
+            "alienation": 3
+          }
+        }
+      ]
+    },
+    "spiral_down_hospital": {
+      "text": "Everything spins. The boundaries of your physical body dissolve. The blood, the drugs, the noise—it's too much. You spiral into a terrifying void, witnessing your own mind devour itself.\n\n一切都在剧烈旋转。肉体的物理边界逐渐溶解。自己的鲜血、非法的精神药物（OD）、致幻的噪音——你承受不了了。你坠入一个令人恐惧的虚空，眼睁睁目睹着你的心智像野兽一样吞噬自己。\n\nYou wake up in the ER. The bright, sterile hospital lights are unforgiving. A nurse looks at your ruined aesthetic—smeared eyeliner, scarred wrists—with a mix of pity and harsh judgment.\n你在急诊室的病床上咳醒。明亮且无菌的灯光毫不留情。护士看着你毁于一旦的美学装扮——晕开如鬼魅的眼线、满是伤痕的手腕——眼神中混合着廉价的同情与严厉的社会性审视。",
+      "choices": [
+        {
+          "label": "Break down in tears. Call for psychiatric help. 防线彻底崩溃，嚎啕大哭。主动请求精神医疗与防抑郁干预。",
+          "next": "rehab_ending",
+          "impact": {
+            "conformity": 3,
+            "alienation": -2
+          }
+        },
+        {
+          "label": "Rip out the IV and sneak out barefoot. 咬牙拔掉静脉输液的针头，连鞋都不穿光脚逃入寒冷的黑夜。",
+          "next": "club_27_ending",
+          "impact": {
+            "rebellion": 4,
+            "alienation": 3
+          }
+        }
+      ]
+    },
+    "office_monday": {
+      "text": "Monday morning. The soul-crushing fluorescent lights. The monotonous hum of the AC. Your boss sternly demands the Q3 reports. You feel an agonizing weight on your chest, as if the walls of conformity are crushing you.\n\n周一早晨。令人灵魂枯萎的刺眼办公区荧光灯。空调单调的嗡嗡声。大腹便便的老板严厉地向你索要第三季度的对齐报告和抓手。你感到胸口压着令人窒息的重担，仿佛被世俗从众的高墙无情挤压成了一具干尸。",
+      "choices": [
+        {
+          "label": "Force a dead smile and hand over the reports. 强行挤出一个比哭还难看的僵硬假笑，恭敬地递上报告。",
+          "next": "corporate_ending",
+          "impact": {
+            "conformity": 4
+          }
+        },
+        {
+          "label": "Scream, tear up the documents, and walk out. 忍无可忍地拍桌子尖叫，将PPT撕得粉碎砸他脸上，永远离去。",
+          "next": "pure_rebellion",
+          "impact": {
+            "rebellion": 4,
+            "expression": 2
+          }
+        }
+      ]
+    },
+    "redemption_path": {
+      "text": "You stepped back from the edge. The exhaustion of the chaotic nightlife and the self-destructive tendencies finally broke you, but in a good way. You started reading again. You got a small, quiet job at a used bookstore. You still wear black, but the anger has faded into a gentle melancholy.\n\n你从万劫不复的深渊边缘退了一步。混乱至极的夜生活和极度的自我毁灭倾向最终摧毁了你，不过是朝着向生而死的好方向。你重新开始阅读纸质书。你在一家偏僻的旧书店找了份安静的差事。你依然习惯穿着全黑的衣服，但曾经那种要摧毁一切的愤怒已经渐渐磨平，化作一抹温柔的存在主义忧郁。",
+      "choices": [
+        {
+          "label": "Accept this new, boring reality. 坦然接受这个崭新、却有些平淡无聊的现实生活。",
+          "next": "ending_survivor",
+          "impact": {}
+        }
+      ]
+    },
+    "ending_survivor": {
+      "text": "【 结局：安静的幸存者 / THE QUIET SURVIVOR 】\n\nYou outlived the scene. While your friends from the underground club either burned out from OD, went to jail, or completely sold out and moved to the soul-crushing suburbs to start nuclear families, you found the rare middle ground. You sit on your small apartment balcony, sipping cheap wine, listening to Joy Division at a reasonable volume. You are no longer a fierce revolutionary, but you are not a corporate slave either. You found peace in the quiet margins of a loud world. You realized that existence doesn't always have to be a bloody, screaming rebellion to be intensely authentic.\n\n你活过了那个疯狂肆虐的年代。当你在地下俱乐部的那些昔日挚友们纷纷因为过度用药（OD）燃尽生命、锒铛入狱，或是彻底向世俗妥协搬到令人绝望的郊区组建核心家庭时，你找到了罕见的折中点。你坐在狭小出租屋的阳台上，品着廉价的红酒，以不会吵到邻居的正常音量放着Joy Division的黑胶。你不再是一个张牙舞爪的革命者，但也不是一个唯唯诺诺的社畜奴隶。你在喧嚣世界的安静边缘找到了内心的平静。你终于明白，存在本身，并不非得永远是一场血淋淋、歇斯底里的叛逆，也能无比真实。",
+      "choices": [
+        {
+          "label": "[ ENDING: THE QUIET SURVIVOR | 重启模拟器 ]",
+          "next": "start",
+          "impact": {}
+        }
+      ]
+    },
+    "sell_out": {
+      "text": "The agency contract was thick, full of legal jargon, but you signed it anyway. They assigned you a stylist who watered down your edgy aesthetic into 'digestible rebel energy' for the masses. Your Instagram following exploded.\n\n那份所谓的造星合同极其厚重，写满了吃人的资本法律术语，但你还是闭着眼睛签了。他们给你分配了随身造型师，将你原本尖锐刺痛的美学强行冲淡，包装成大众“容易消化的轻叛逆感”。你的赛博账号粉丝迎来了极其讽刺的爆炸性增长。",
+      "choices": [
+        {
+          "label": "Accept your new plastic throne. 接受你那用工业流水线塑料铸成的全新王座。",
+          "next": "ending_plastic",
+          "impact": {}
+        }
+      ]
+    },
+    "ending_plastic": {
+      "text": "【 结局：塑料偶像 / THE PLASTIC IDOL 】\n\nYou are famous. You are incredibly rich. You live in a sterile, minimalist penthouse overlooking the smog-choked city. But every time you look in the huge mirrored walls, you see a meticulously manufactured product staring back. You sell fake studded belts, factory-ripped grunge flannels, and sanitized 'punk' aesthetic to rich naive kids who think buying your expensive merch makes them special. The real underground kids despise your guts; you are a punchline in the dive bars you used to live in. You became the very capitalist system you once violently swore to break. You are entirely hollow inside, an empty vessel filled only with brand sponsorships, energy drink ads, and millions of meaningless digital likes.\n\n你出名了。你暴富了。你住在一套视野绝佳、俯瞰整座被雾霾呛住的城市、毫无生气的极简主义顶层公寓里。但每当你看着那一整面的落地镜，你看到的只是一个被精心制造出来的工业废料产品在回望你。你把做工粗劣的假铆钉腰带、流水线工厂做旧的破洞衬衫，连同被阉割过的“朋克”美学，打包高价卖给那些天真又富有的孩子，他们还以为买了你的周边就能显得与众不同。真正的地下老炮们对你鄙视到了骨子里；在你曾经混迹的那些破酒吧里，你成了人人唾骂的笑话。你成为了你曾经发誓要暴力摧毁的那个资本系统本身。你内心空洞如壳，里面塞满的从来不是反抗的灵魂，只有各大品牌的赞助通告局、功能饮料的广告，以及几百万个毫无意义的赛博点赞。",
+      "choices": [
+        {
+          "label": "[ ENDING: THE PLASTIC IDOL | 重启模拟器 ]",
+          "next": "start",
+          "impact": {}
+        }
+      ]
+    },
+    "pure_rebellion": {
+      "text": "You rejected the record deals, you rejected the mainstream safety, you rejected the corporate 9-to-5. You took to the streets, organizing underground raves, creating gritty zines, and living entirely off the grid in the shadows.\n\n你砸掉了唱片合约，你唾弃了主流假惺惺的安全感，你更将朝九晚五的公司制度踩在脚下。你走上街头，在废弃桥洞下组织非法的地下狂欢派对（Rave），复印粗糙刺耳的地下印刷志（Zines），彻底过上了完全脱离社会监控体系的生活。",
+      "choices": [
+        {
+          "label": "Rule the underground. 作为法外狂徒，统治这片地下世界。",
+          "next": "ending_royalty",
+          "impact": {}
+        }
+      ]
+    },
+    "ending_royalty": {
+      "text": "【 结局：地下世界的无冕之王 / UNDERGROUND ROYALTY 】\n\nYou became a living legend in the city's grimy underbelly. Your alias is whispered with total reverence in basement shows, dive bars, and squatter settlements. You possess absolutely no material wealth, no credit score, no bank account, and no stable address, but you command unquestionable loyalty from an army of misfits, punks, runaways, and broken dreamers. It's a dangerous, chaotic, and often miserably cold existence—constantly dodging the police riots, scavenging for food, and fighting turf wars—but it is unequivocally, violently authentic to the core. You chose absolute, terrifying freedom over comfortable subjugation, and the subculture streets will forever carve your name in concrete.\n\n你成了这座城市肮脏暗地里的一位活着的传奇。你的代号在那些地下室演出、破败酒吧和非法占屋者的聚落里，被众人怀着极度的敬意低声传颂。你没有任何物质财富，没有信用评分，没有银行卡账户，也没有稳定的挡风避雨之地，但你拥有那一整支由怪胎、朋克、离家出走者和破碎梦想家组成的军队的绝对忠诚。这是一种极度危险、混乱不堪且时常需要挨饿受冻的生活——你要无休止地躲避警察的防暴清场，在垃圾堆里搜刮口粮，还要在街头火拼中死里逃生——但它毫无疑问、极其暴烈且彻头彻尾地真实。你在被剥削的舒适和令人恐惧的绝对自由之间，果断选择了自由。而这片亚文化的灰色街头，将永远把你的名字刻在坚硬的水泥墙上。",
+      "choices": [
+        {
+          "label": "[ ENDING: UNDERGROUND ROYALTY | 重启模拟器 ]",
+          "next": "start",
+          "impact": {}
+        }
+      ]
+    },
+    "corporate_ending": {
+      "text": "You washed off the heavy goth eyeliner, cut your messy hair into a respectable, unremarkable corporate style, and started wearing gray slacks and ironed shirts. You profusely apologized to your boss, handed in the Q3 reports, and started working unpaid overtime.\n\n你在卫生间里用热水洗掉了浓重如炭的哥特眼线，把不羁的乱发剪成被HR认可的、体面且极其平庸的样子，开始穿千篇一律的灰色休闲裤和熨烫平整的衬衫。你诚惶诚恐地向老板道了歉，如期交出了第三季度的对齐报告，并开始无情且没有加班费地通宵加班。",
+      "choices": [
+        {
+          "label": "Embrace the mundane. 行尸走肉般地投入世俗的巨大绞肉机。",
+          "next": "ending_corporate",
+          "impact": {}
+        }
+      ]
+    },
+    "ending_corporate": {
+      "text": "【 结局：选择生活 / CHOOSE LIFE (Surrender) 】\n\nYou chose life. You swallowed your pride, suppressed your rage, got promoted to Middle Management, and bought the f**king big television that covers half your living room wall. You bought the washing machine, the hybrid car you hate, the modern sterile furniture scheme, and the matching luggage for vacations you're too exhausted to enjoy. The visceral memories of the underground club, the skull-shaking heavy bass, and the bleeding neon lights faded into a blurry, hazy nightmare that you sometimes desperately claw at after a few too many IPAs at a mandatory corporate retreat. You are completely normal. You are utterly, hopelessly numb. The system broke you, reassembled you, and entirely won. Have a nice Monday.\n\n你他妈的选择了生活。你咽下了曾经所有的骄傲，压抑了本能的狂怒，一路跪舔升到了中层管理，并且买下了那台能遮住你半壁客厅墙的他妈的巨型大电视。你买了洗衣机，买了你其实很讨厌的混动汽车，买了毫无生气的极简现代家具，还有那些配套的名牌行李箱——用来去度那些你根本累得无法享受的假。关于地下俱乐部那些血脉偾张的记忆、震碎头骨的重低音，以及流血般刺目的霓虹灯，已经完全褪色成了一场模糊迷离的黑白噩梦。只有在那些令人作呕的强制性公司团建上，灌多几杯精酿啤酒后，你才会在卫生间里隔着镜子绝望地试图抓挠那些残影。你彻底回归了正常。你也终于彻底地、无可救药地麻木了。系统把你碾碎，将你重新拼接成了它想要的样子，系统彻底赢了。祝你周一工作愉快。",
+      "choices": [
+        {
+          "label": "[ ENDING: CHOOSE LIFE | 重启模拟器 ]",
+          "next": "start",
+          "impact": {}
+        }
+      ]
+    },
+    "fade_away": {
+      "text": "You ran away from everything. The extreme pressures of the subculture, the ridiculous demands of normal society—it was all way too loud, too bright, too demanding. You barricaded yourself in a cheap, windowless room, diving deep into the darkest corners of the internet.\n\n你抛弃并逃避了一切。亚文化圈子里那些互相攀比的极端做派，正常社会里那些荒谬可笑的生存法则——所有这一切都太刺耳、太耀眼、太咄咄逼人了。你用重锁把自己封死在一间廉价、发霉且没有窗户的出租屋里，深深潜入互联网最不见天日的深网角落中。",
+      "choices": [
+        {
+          "label": "Become the ghost. 化作无形无体的赛博幽灵。",
+          "next": "ending_ghost",
+          "impact": {}
+        }
+      ]
+    },
+    "ending_ghost": {
+      "text": "【 结局：霓虹灯下的赛博幽灵 / THE NEON GHOST 】\n\nYears slip by in a toxic blur of glowing monitors, spilled energy drinks, and stacked pizza boxes. You became a complete shut-in, a textbook 'Hikikomori', utterly terrified of the physical outside world. You watched the subcultures you once bled for evolve, commercialize, and die through a cracked screen, but you stood completely still in time, decaying. You aggressively avoided the pain of human connection, the sting of failure, and the trauma of heartbreak. But in doing so, you also successfully avoided living entirely. You are a pale, sickly ghost lingering in a digital shell, speaking only to anonymous avatars. You have been completely forgotten by the flesh-and-blood city that never stops moving outside your locked door. Are you even real anymore?\n\n在这个充满刺眼屏幕反光、打翻的功能饮料和堆积如山的披萨盒的发臭房间里，几年光阴犹如一滩烂泥般飞逝。你成了一个彻底的键盘侠与蛰居族（Hikikomori），对门外的物理世界充满了病态的恐惧。你透过布满裂纹的显示器，冷眼看着你曾经愿意为此流血的亚文化圈子一步步演变、被商业收编然后迅速死亡，但你自己生命的时间指针却永远停滞了，并在原地腐烂。你极具攻击性地避开了人际交往的痛苦，避开了失败的刺痛，避开了心碎的创伤。但正因如此，你也极其成功地避开了任何所谓的生活。你只是一个萦绕在数字躯壳中的、苍白病态的幽灵，仅仅通过敲击键盘与那些匿名的虚拟头像交流。在门外那座永不停歇的血肉横飞的城市里，没有任何一个人还记得你。你真的还存在吗？",
+      "choices": [
+        {
+          "label": "[ ENDING: THE NEON GHOST | 重启模拟器 ]",
+          "next": "start",
+          "impact": {}
+        }
+      ]
+    },
+    "jail_ending": {
+      "text": "The sirens caught up to you. You were cornered in a dead-end alley with nowhere left to run, boxed in by police cruisers. They tackled you hard to the wet concrete, the cold unforgiving steel of the handcuffs snapping tightly around your bruised wrists.\n\n刺耳的警笛声最终死死咬住了你。你被几排警车围堵逼进了一个死胡同，上天无路下地无门。防暴警察粗暴地将你猛按在湿滑冰冷的水泥地上，冰冷且不由分说的钢制手铐“咔哒”一声紧紧锁住你那满是淤青的手腕。",
+      "choices": [
+        {
+          "label": "Face the concrete reality. 满嘴鲜血地面对这惨淡坚硬的监控现实。",
+          "next": "ending_caged",
+          "impact": {}
+        }
+      ]
+    },
+    "ending_caged": {
+      "text": "【 结局：钢筋水门里的笼中之鸟 / CAGED BIRD 】\n\nThe brutal system is expertly designed to break rebels, and in your case, it succeeded flawlessly. Behind heavy iron bars, your unique, fiercely defended aesthetic was forcibly stripped away layer by layer, replaced by an abrasive, identical orange or gray jumpsuit. Your chosen alias, the name you bled to build on the streets, was permanently replaced by an eight-digit inmate number stamped on your file. The chaotic, intoxicating freedom of the night is now heavily regimented by indifferent, baton-wielding guards and loud buzzers dictating when you eat, sleep, and breathe. In the suffocating, maddening silence of your 6x8 cell, staring at the peeling concrete ceiling, you finally wonder if the flash of adrenaline and the raw blind anger was really worth throwing away your life's autonomy. Your rebellion hit a state-funded brick wall, and the wall didn't even flinch.\n\n这个吃人的残酷体制被极其专业地设计用来碾碎所有反叛者；而在你身上，它干得非常漂亮。在沉重的铁窗之后，你那曾经誓死捍卫的独特美学装扮被强制、层层剥走，取而代之的是粗糙刺眼、千篇一律的橘色或灰色囚服。你为自己拼命在街头搏出的代号，被一份档案上永远烙印的八位数犯人编号无情替代。曾经深夜里那种混乱、令人沉醉的绝对自由，如今被那些手持警棍、冷漠麻木的狱警，以及震耳欲聋的作息电铃死死统治，他们甚至规定了你何时应该呼吸。在你那间极其压抑、令人发疯的6x8英尺牢房的死寂中，你整夜死死盯着剥落的水泥墙皮，终于开始忍不住怀疑，那片刻肾上腺素的爆发和盲目的发泄，是否真的值得用你这辈子所有的底牌去交换。你的叛逆撞上了一堵由国家暴力铸成的高墙，而高墙连一丝裂缝都没有。",
+      "choices": [
+        {
+          "label": "[ ENDING: CAGED BIRD | 重启模拟器 ]",
+          "next": "start",
+          "impact": {}
+        }
+      ]
+    },
+    "club_27_ending": {
+      "text": "You pushed it past the absolute limit of human tolerance. You tore out your IVs, spraying crimson, running out into the blistering freezing night in a thin hospital gown. You sought out the heaviest thrill, the ultimate, final escape. The toxic cocktail of chemical substances coursing through your veins reached a critical, fatal mass.\n\n你把一切推向了超越人类肉身承受极限的绝对禁区。你在一片刺目的鲜血中拔掉粗硬的静脉输液管，仅穿一件单薄的病号服，疯了般冲入外头刺骨寒冰的黑夜里。你去寻找最猛烈的刺激，那不计后果的、最终极的逃亡之旅。在你静脉中狂飙的混合化学毒药，终于叠加到了致命不可逆的临界点。",
+      "choices": [
+        {
+          "label": "Close your eyes forever. 伴着强烈的濒死快感，永远闭上你的双眼。",
+          "next": "ending_27",
+          "impact": {}
+        }
+      ]
+    },
+    "ending_27": {
+      "text": "【 结局：27岁俱乐部的永恒悲剧 / JOIN THE 27 CLUB (OD Fatal) 】\n\nYou burned out incredibly fast and blindingly bright. Like Kurt Cobain, like Janis Joplin, like Sid Vicious, you wrote your name into the tragic, glorified mythos of the 27 Club (even if the autopsy report showed you weren't exactly 27). Your exhausted heart simply seized and stopped beating on the filthy, damp floor of an unknown squat house. You achieved the ultimate, irreversible rebellion against the physical world by simply checking out of it forever. Your surviving friends spray-painted your stylized alias on the brick alley walls, turning your corpse into an underground martyr, a dark, deeply romanticized tragedy to inspire the next generation of doomed youth. But you aren't around to hear their eulogies or see the tribute shows. There is no glorious afterlife for you, no neon paradise. There is only the damp earth and the eternal void. In the final, fading seconds of your consciousness, as the screen went black, you had to ask yourself: Was the aesthetic truly worth the absolute annihilation of your soul?\n\n你燃烧得极其迅速，且无比刺眼。像科特·柯本、像贾尼斯·乔普林、像席德·维瑟斯一样，你用最极端的方式把自己的名字写进了那个充满病态悲剧光环的“27岁俱乐部”（哪怕法医的尸检报告上写着你未必正好27岁）。在某个不知名废弃占屋那满是污渍、潮湿冰冷的地板上，你那不堪重负的心脏就这样简单粗暴地抽搐紧缩，然后彻底罢工了。你通过永远退出游戏，对这个物理世界进行了一场终极且不可逆的反叛绝杀。你大难不死的狐朋狗友们在红砖巷的墙上用喷漆大范围涂鸦你的化名，将你那具冰冷的尸体供奉为地下世界的又一个殉道者，一出被极致黑暗浪漫化的惨剧，用来标榜和煽动下一批注定毁灭的年轻人。但你再也听不到他们虚伪的悼词，也看不到致敬你的拼盘演出了。对你来说，既没有荣耀的来世，也没有霓虹闪烁的热血天堂。等待你的只剩下潮湿发臭的泥土和永恒死寂的虚空。在意识逐渐溃散、一切切入黑屏的最后那几秒钟里，你不得不在心底问自己：这所谓的极致亚文化美学，真的值得用你灵魂的绝对湮灭来献祭吗？",
+      "choices": [
+        {
+          "label": "[ ENDING: THE 27 CLUB | 重启模拟器 ]",
+          "next": "start",
+          "impact": {}
+        }
+      ]
+    },
+    "rehab_ending": {
+      "text": "You hit rock bottom so hard you felt your spine shatter. Absolutely terrified of the sudden proximity of death, you crawled to a phone booth and called a crisis hotline. A sterile white van picked you up from the gutter, forcibly dragging you away from the warm neon glow and throwing you into the painfully bright, stark fluorescent reality of a state-funded rehabilitation clinic.\n\n你以一种极具毁灭性的姿态狠狠砸向了人生的谷底，剧烈的冲击感仿佛连脊椎都被震碎了。在切身感受死神几乎贴脸的极度战栗中，你像条虫子一样爬进公用电话亭，按下了危机干预热线。没多久，一辆透着死寂无菌气息的白色面包车把你从臭水沟里捞了起来，硬生生把你从街头霓虹灯那虚假温暖的光晕中剥离，像扔垃圾一样把你扔进了公立戒毒诊所那刺眼、冰冷、荧光灯惨白的现实病房里。",
+      "choices": [
+        {
+          "label": "Start the agonizing process of getting clean. 脱下皮套，开始那痛不欲生、扒平抽筋的戒断与肉体清洗过程。",
+          "next": "ending_rehab",
+          "impact": {}
+        }
+      ]
+    },
+    "ending_rehab": {
+      "text": "【 结局：惨白日光下的重生 / THE CLINICAL REBIRTH 】\n\nThe physical withdrawals were pure, unadulterated hell. You soaked through the cheap hospital sheets with cold sweat every hour, vomiting bile and screaming against the invisible demons clawing through your own violently infected blood. But against all odds, you survived. You are exactly 60 days sober today. You sit in a pitiful circle of broken plastic folding chairs under flickering, terrible institutional lighting. You sip lukewarm, tasteless coffee from a styrofoam cup and take turns sharing your pathetic life story with a group of strangers whose sunken eyes hold the exact same haunted, shattered emptiness as yours. You are technically alive, but the world feels like it's covered in plastic wrap—muted, tasteless, entirely devoid of the extreme chaotic highs and the crushing, dramatic lows you used to live for. You ultimately traded the dark, visceral poetry of the underground for the intensely mundane, repetitive metric of surviving 'one day at a time.' It's painfully boring, it's agonizingly hard, and it feels like a slow death... but it's officially categorized as 'life.' Keep breathing.\n\n纯粹的生理戒断反应根本就是不折不扣、刀剔斧凿的人间炼狱。你每小时都在用冷汗浸透那些廉价发硬的病床床单，一边大口呕吐着发苦胆汁，一边歇斯底里地尖叫、对抗着在你那严重感染的血液中疯狂撕咬的无形恶魔。但不可思议的是，你居然硬抗着活了下来。到今天为止，你已经保持生理清醒整整60天了。你每天都只能乖乖坐在糟糕惨白的机构白炽灯下，围成一圈的破旧塑料折叠椅上。你端着泡沫塑料杯，抿着温热刺鼻的劣质咖啡，轮流和一群陌生人剖白自己那可悲又可笑的人生经历——这群陌生人深陷的眼窝里，全都有着和你一模一样被厉鬼纠缠榨干后的破碎瞳孔与无尽空洞。从医学指标上讲，你确实还活着，但整个世界对你来说就像被裹上了一层厚厚的塑料保鲜膜——所有感官都被静音了，食物味同嚼蜡，再也没有了那些让你曾经欲仙欲死的极致感官巅峰，也没有了那种充满史诗戏剧感、粉碎灵魂的深渊坠落。你最终亲手用地下世界那充满黑暗粗粝质感的血腥诗意，换取了一句极其庸俗、枯燥、不断复读的口号：“过好不碰毒的每一天”。这一眼看得到头的未来实在痛苦得令人发指，无聊得让人想撞墙，它甚至感觉就像是一场极度缓慢的凌迟处死……但在人类社会的官方定义里，这玩意儿他妈的就被称作“生活”。继续呼吸吧。\n",
+      "choices": [
+        {
+          "label": "[ ENDING: THE CLINICAL REBIRTH | 重启模拟器 ]",
+          "next": "start",
+          "impact": {}
+        }
+      ]
+    }
+  }
+}
